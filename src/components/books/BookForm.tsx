@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Book, ReadStatus } from "@prisma/client"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -82,10 +83,12 @@ export function BookForm({ book }: BookFormProps) {
       }
 
       const data = await res.json()
+      toast.success(book ? "書籍を更新しました" : "書籍を登録しました")
       router.push(`/books/${book?.id ?? data.id}`)
       router.refresh()
     } catch {
       setError("エラーが発生しました")
+      toast.error("エラーが発生しました")
     } finally {
       setLoading(false)
     }
