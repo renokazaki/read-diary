@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { Header } from "@/components/layout/Header"
+import { Providers } from "@/components/providers"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "読書記録",
-  description: "読書習慣を記録・管理するWebアプリ",
+  title: {
+    default: "読書記録",
+    template: "%s | 読書記録",
+  },
+  description: "読書習慣をシンプルに管理。書籍・メモ・Kindleハイライトをまとめて記録。",
 }
 
 export default function RootLayout({
@@ -13,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja">
-      <body className="antialiased">
-        <Header />
-        <main className="container mx-auto max-w-5xl px-4 py-6">{children}</main>
+    <html lang="ja" suppressHydrationWarning>
+      <body className="antialiased min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )

@@ -40,7 +40,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
       {/* Book Info */}
       <div className="flex gap-6">
         {/* Cover */}
-        <div className="flex-shrink-0 w-24 h-36 relative rounded-lg overflow-hidden bg-gray-100 shadow">
+        <div className="flex-shrink-0 w-24 h-36 relative rounded-xl overflow-hidden bg-[var(--muted)] shadow">
           {book.coverImageUrl ? (
             <Image
               src={book.coverImageUrl}
@@ -52,7 +52,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <BookOpen className="h-10 w-10 text-gray-400" />
+              <BookOpen className="h-10 w-10 text-[var(--muted-foreground)] opacity-50" />
             </div>
           )}
         </div>
