@@ -19,6 +19,7 @@ function ThemeToggle() {
       size="icon"
       aria-label="テーマを切り替え"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
     >
       {theme === "dark" ? (
         <Sun className="h-4 w-4" />
@@ -29,22 +30,38 @@ function ThemeToggle() {
   )
 }
 
+/** ユーザーアバター仮置きコンポーネント（Clerk導入後に差し替え予定） */
+function UserAvatar() {
+  return (
+    <div
+      className="h-8 w-8 rounded-full bg-white border-2 border-[var(--border)] shrink-0"
+      aria-label="ユーザーアバター"
+    />
+  )
+}
+
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
+    <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
       <div className="container mx-auto max-w-5xl px-4 h-14 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link
           href="/books"
-          className="flex items-center gap-2 font-bold text-lg shrink-0 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 font-bold text-lg tracking-tight shrink-0 hover:opacity-80 transition-opacity"
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-[var(--primary)]">
-            <BookOpen className="h-4 w-4 text-[var(--primary-foreground)]" />
+          <div
+            className="flex items-center justify-center w-7 h-7 rounded-lg shadow-md"
+            style={{
+              background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
+              boxShadow: "0 2px 8px rgba(79,70,229,0.35)",
+            }}
+          >
+            <BookOpen className="h-4 w-4 text-white" />
           </div>
           <span className="hidden sm:inline">読書記録</span>
         </Link>
 
-        {/* Actions */}
+        {/* Actions — 本を追加 | ThemeToggle | UserAvatar */}
         <div className="flex items-center gap-1.5">
           <Button asChild size="sm" className="gap-1.5">
             <Link href="/books/new">
@@ -53,6 +70,7 @@ export function Header() {
             </Link>
           </Button>
           <ThemeToggle />
+          <UserAvatar />
         </div>
       </div>
     </header>
