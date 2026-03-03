@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 
 const STATUS_TABS: { value: ReadStatus | "ALL"; label: string }[] = [
   { value: "ALL", label: "すべて" },
-  { value: "WANT_TO_READ", label: "読みたい" },
-  { value: "READING", label: "読んでいる" },
-  { value: "FINISHED", label: "読み終わった" },
+  { value: "WANT_TO_READ", label: "積読" },
+  { value: "READING", label: "読書中" },
+  { value: "FINISHED", label: "読了" },
 ]
 
 interface BooksPageProps {
@@ -27,20 +27,28 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
   })
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Page header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">書籍一覧</h1>
-        <Button asChild>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">書籍一覧</h1>
+          <p className="text-sm text-[var(--muted-foreground)] mt-0.5">
+            {books.length} 冊
+          </p>
+        </div>
+        <Button asChild className="gap-1.5 shadow-sm">
           <Link href="/books/new">
-            <Plus className="h-4 w-4 mr-1" />
+            <Plus className="h-4 w-4" />
             本を追加
           </Link>
         </Button>
       </div>
 
-      {/* Status Filter */}
-      <div className="flex gap-1 border-b border-[var(--border)]">
+      {/* Status filter — segmented control */}
+      <div
+        className="inline-flex rounded-xl p-1 gap-0.5"
+        style={{ background: "var(--muted)" }}
+      >
         {STATUS_TABS.map((tab) => {
           const isActive =
             tab.value === "ALL" ? !activeStatus : activeStatus === tab.value
@@ -50,11 +58,19 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
             <Link
               key={tab.value}
               href={href}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "border-[var(--primary)] text-[var(--foreground)]"
-                  : "border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                  ? "text-white shadow-sm"
+                  : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
               }`}
+              style={
+                isActive
+                  ? {
+                      background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
+                      boxShadow: "0 2px 8px rgba(79,70,229,0.3)",
+                    }
+                  : {}
+              }
             >
               {tab.label}
             </Link>
@@ -62,16 +78,21 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
         })}
       </div>
 
-      {/* Book Grid */}
+      {/* Book grid */}
       {books.length === 0 ? (
-        <div className="text-center py-16">
-          <BookOpen className="h-12 w-12 mx-auto text-[var(--muted-foreground)] mb-4" />
-          <p className="text-[var(--muted-foreground)] mb-4">
+        <div className="text-center py-20">
+          <div
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
+            style={{ background: "var(--muted)" }}
+          >
+            <BookOpen className="h-8 w-8 text-[var(--muted-foreground)]" />
+          </div>
+          <p className="text-[var(--muted-foreground)] mb-6 text-sm">
             {activeStatus ? "該当する書籍がありません" : "まだ書籍が登録されていません"}
           </p>
-          <Button asChild>
+          <Button asChild className="gap-1.5">
             <Link href="/books/new">
-              <Plus className="h-4 w-4 mr-1" />
+              <Plus className="h-4 w-4" />
               最初の本を追加する
             </Link>
           </Button>

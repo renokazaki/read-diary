@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Pencil, Trash2, BookMarked, User } from "lucide-react"
 import { Memo } from "@prisma/client"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -23,6 +24,7 @@ export function MemoCard({ memo, onDelete, onUpdate }: MemoCardProps) {
     await onUpdate(memo.id, content.trim())
     setSaving(false)
     setEditing(false)
+    toast.success("メモを更新しました")
   }
 
   const handleCancel = () => {
@@ -30,19 +32,27 @@ export function MemoCard({ memo, onDelete, onUpdate }: MemoCardProps) {
     setEditing(false)
   }
 
+  const handleDelete = () => {
+    onDelete(memo.id)
+    toast.success("メモを削除しました")
+  }
+
   return (
-    <div className="group border border-[var(--border)] rounded-lg p-4 space-y-2">
+    <div className="group border border-[var(--border)] rounded-xl p-4 space-y-2 bg-[var(--card)] hover:border-[var(--ring)]/30 transition-colors">
       {/* Source badge + metadata */}
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 flex-wrap">
           {memo.source === "KINDLE_IMPORT" ? (
-            <BookMarked className="h-3.5 w-3.5 text-orange-500 flex-shrink-0" />
+            <div className="flex items-center gap-1 text-xs bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded-full">
+              <BookMarked className="h-3 w-3 flex-shrink-0" />
+              <span>Kindleハイライト</span>
+            </div>
           ) : (
-            <User className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+            <div className="flex items-center gap-1 text-xs bg-[var(--accent)] text-[var(--accent-foreground)] px-2 py-0.5 rounded-full">
+              <User className="h-3 w-3 flex-shrink-0" />
+              <span>手動メモ</span>
+            </div>
           )}
-          <span className="text-xs text-[var(--muted-foreground)]">
-            {memo.source === "KINDLE_IMPORT" ? "Kindleハイライト" : "手動メモ"}
-          </span>
           {memo.chapter && (
             <span className="text-xs text-[var(--muted-foreground)]">· {memo.chapter}</span>
           )}
@@ -52,7 +62,7 @@ export function MemoCard({ memo, onDelete, onUpdate }: MemoCardProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
           <Button
             variant="ghost"
             size="icon"
@@ -65,7 +75,7 @@ export function MemoCard({ memo, onDelete, onUpdate }: MemoCardProps) {
             variant="ghost"
             size="icon"
             className="h-7 w-7 text-[var(--destructive)] hover:text-[var(--destructive)]"
-            onClick={() => onDelete(memo.id)}
+            onClick={handleDelete}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
@@ -91,7 +101,7 @@ export function MemoCard({ memo, onDelete, onUpdate }: MemoCardProps) {
           </div>
         </div>
       ) : (
-        <p className="text-sm whitespace-pre-wrap">{memo.content}</p>
+        <p className="text-sm whitespace-pre-wrap leading-relaxed">{memo.content}</p>
       )}
     </div>
   )
