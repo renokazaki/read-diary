@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useTheme } from "next-themes"
-import { BookOpen, Plus, Sun, Moon } from "lucide-react"
+import { BookOpen, Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 
@@ -61,14 +61,8 @@ export function Header() {
           <span className="hidden sm:inline">読書記録</span>
         </Link>
 
-        {/* Actions — 本を追加 | ThemeToggle | UserAvatar */}
+        {/* Actions — ThemeToggle | UserAvatar */}
         <div className="flex items-center gap-1.5">
-          <Button asChild size="sm" className="gap-1.5">
-            <Link href="/books/new">
-              <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">本を追加</span>
-            </Link>
-          </Button>
           <ThemeToggle />
           <UserAvatar />
         </div>
