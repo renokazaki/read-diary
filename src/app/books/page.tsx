@@ -5,11 +5,11 @@ import { ReadStatus } from "@prisma/client"
 import { BookCard } from "@/components/books/BookCard"
 import { Button } from "@/components/ui/button"
 
-const STATUS_TABS: { value: ReadStatus | "ALL"; label: string; count?: number }[] = [
+const STATUS_TABS: { value: ReadStatus | "ALL"; label: string }[] = [
   { value: "ALL", label: "すべて" },
-  { value: "WANT_TO_READ", label: "読みたい" },
-  { value: "READING", label: "読んでいる" },
-  { value: "FINISHED", label: "読み終わった" },
+  { value: "WANT_TO_READ", label: "積読" },
+  { value: "READING", label: "読書中" },
+  { value: "FINISHED", label: "読了" },
 ]
 
 interface BooksPageProps {
@@ -44,8 +44,11 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
         </Button>
       </div>
 
-      {/* Status filter — pill style */}
-      <div className="flex gap-1.5 flex-wrap">
+      {/* Status filter — segmented control */}
+      <div
+        className="inline-flex rounded-xl p-1 gap-0.5"
+        style={{ background: "var(--muted)" }}
+      >
         {STATUS_TABS.map((tab) => {
           const isActive =
             tab.value === "ALL" ? !activeStatus : activeStatus === tab.value
@@ -55,10 +58,10 @@ export default async function BooksPage({ searchParams }: BooksPageProps) {
             <Link
               key={tab.value}
               href={href}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? "text-white shadow-sm"
-                  : "bg-[var(--muted)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--secondary)]"
+                  : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
               }`}
               style={
                 isActive
