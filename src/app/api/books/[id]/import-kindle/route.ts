@@ -31,19 +31,23 @@ export async function POST(
     )
   }
 
-  const result = await prisma.memo.createMany({
-    data: highlights.map((h) => ({
-      bookId: id,
-      content: h.content,
-      source: "KINDLE_IMPORT" as const,
-      location: h.location,
-      chapter: h.chapter,
-      color: h.color,
-    })),
-  })
+  const created = await Promise.all(
+    highlights.map((h) =>
+      prisma.memo.create({
+        data: {
+          bookId: id,
+          content: h.content,
+          source: "KINDLE_IMPORT" as const,
+          location: h.location,
+          chapter: h.chapter,
+          color: h.color,
+        },
+      })
+    )
+  )
 
   return NextResponse.json({
-    message: `${result.count}件のハイライトをインポートしました`,
-    count: result.count,
+    message: `${created.length}件のハイライトをインポートしました`,
+    count: created.length,
   })
 }
