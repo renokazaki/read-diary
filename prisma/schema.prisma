@@ -23,7 +23,7 @@ enum MemoSource {
 model Book {
   id            String     @id @default(cuid())
   title         String
-  author        String
+  author        String?
   coverImageUrl String?
   googleBooksId String?
   isbn          String?
