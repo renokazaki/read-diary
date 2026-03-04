@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json()
   const { title, author, coverImageUrl, googleBooksId, isbn, status, startDate, endDate, rating } = body
 
-  if (!title || !author) {
-    return NextResponse.json({ error: "title and author are required" }, { status: 400 })
+  if (!title) {
+    return NextResponse.json({ error: "title is required" }, { status: 400 })
   }
 
   if (rating !== undefined && rating !== null && (rating < 1 || rating > 5)) {
