@@ -15,23 +15,34 @@ export function BookSearch({ onSelect }: BookSearchProps) {
   const [results, setResults] = useState<GoogleBookResult[]>([])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const search = useCallback(async (q: string) => {
     if (!q.trim()) {
       setResults([])
+      setError(null)
       setOpen(false)
       return
     }
 
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch(`/api/google-books?q=${encodeURIComponent(q)}`)
       const data = await res.json()
+      if (!res.ok) {
+        setError(data.error ?? "検索に失敗しました")
+        setResults([])
+        setOpen(true)
+        return
+      }
       setResults(data.books ?? [])
       setOpen(true)
     } catch {
+      setError("検索に失敗しました")
       setResults([])
+      setOpen(true)
     } finally {
       setLoading(false)
     }
@@ -68,7 +79,13 @@ export function BookSearch({ onSelect }: BookSearchProps) {
         )}
       </div>
 
-      {open && results.length > 0 && (
+      {open && error && (
+        <div className="absolute z-10 w-full mt-1 bg-[var(--popover)] border border-[var(--border)] rounded-md shadow-lg px-3 py-2 text-sm text-red-500">
+          {error}
+        </div>
+      )}
+
+      {open && !error && results.length > 0 && (
         <div className="absolute z-10 w-full mt-1 bg-[var(--popover)] border border-[var(--border)] rounded-md shadow-lg max-h-80 overflow-y-auto">
           {results.map((book) => (
             <button
