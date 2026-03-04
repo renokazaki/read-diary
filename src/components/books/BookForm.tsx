@@ -48,8 +48,8 @@ export function BookForm({ book }: BookFormProps) {
     e.preventDefault()
     setError("")
 
-    if (!title.trim() || !author.trim()) {
-      setError("タイトルと著者名は必須です")
+    if (!title.trim()) {
+      setError("タイトルは必須です")
       return
     }
 
@@ -120,13 +120,12 @@ export function BookForm({ book }: BookFormProps) {
 
         {/* Author */}
         <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="author">著者 *</Label>
+          <Label htmlFor="author">著者</Label>
           <Input
             id="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             placeholder="著者名"
-            required
           />
         </div>
 
